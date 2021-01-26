@@ -55,6 +55,8 @@ For testing - You can run python3 -m unittest test_handle_data.py.
 There are unit test cases created for each of the helper function methods in handle_data.py.
 Some of the functions internally call other functions. So I have not written unit test cases for those functions.
 
+Screenshots have been added in the Screenshots folder to showcase how the project works.
+
 # Bonus
 
 For the bonus part, my idea was to use a new graph that took into consideration - DT, CG and CE lines do not operate. So the graph created for Part 1 could be used for finding routes through the day and the new graph could be used for finding routes during night hours. I however, haven't yet been able to complete that piece of code and hence will not be committing that code along with this piece of code. I will commit it, once I have a working solution.
