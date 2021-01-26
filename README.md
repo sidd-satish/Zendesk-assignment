@@ -10,6 +10,8 @@ Step 2 - The server.py consists of the routes to the application. It internally 
 
 The handle_data.py file consists of the helper functions required to manipulate the data and find the best route.
 
+One thing to note is that -> When the source and destination stations are input, the program takes about 20 seconds to output the final route and it is not yet optimised to provide the best route quicker. Also no HTML overlay is added to show this, but can be seen on the browser. This is one of the assumptions I had made when writing the code.
+
 Step 3 - The efficiency heuristic used to display the route is 'Shortest Route'. I have tried to find the shortest route (least number of stations) to visit for going from a certain source to destination. The code for this can be found in the handle_data.py file. There are 2 other functions that find any route and all possible routes from a certain source station to a destination station.
 
 The assumption that I have made is that, I have assumed that even the stations that are to be opened in the future are already in the network. This is because the problem statement mentioned that this was a routing service for a future network. As a result, at certain times routes may be suggested that might involve going through stations or interchanges that are not currently functional.
