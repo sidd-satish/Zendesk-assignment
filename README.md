@@ -6,7 +6,7 @@ This project is created using Python and Django. I have used Docker, with a Pyth
 Steps Followed:
 Step 1 - I have created a parse.py file that creates a graph out of the CSV file that was given to me. This graph has a list of all possible previous and next stations that can be visited from a given station. This was done as part of the pre-processing and to convert the data to a format that will be easier to find the best routes from a certain source to destination station. This is stored in the static/ directory and the filename is data.json.
 
-Step 2 - The server.py consists of the routes to the application. It internally calls other functions that are required in order to find the route from a source to destination station. 
+Step 2 - The server.py consists of the routes to the application. It internally calls other functions that are required in order to find the route from a source to destination station. The /route route is used for the first part of the project.
 
 The handle_data.py file consists of the helper functions required to manipulate the data and find the best route.
 
@@ -59,6 +59,20 @@ Screenshots have been added in the Screenshots folder to showcase how the projec
 
 # Bonus
 
-For the bonus part, my idea was to use a new graph that took into consideration - DT, CG and CE lines do not operate. So the graph created for Part 1 could be used for finding routes through the day and the new graph could be used for finding routes during night hours. I however, haven't yet been able to complete that piece of code and hence will not be committing that code along with this piece of code. I will commit it, once I have a working solution.
+A new additional graph, bonus_data.py is created using the parse.py file to create a graph that accounts for night travel where certain lines are not operational.
 
-My idea was to use the shortest_route function and all_routes functions as in Part 1, which are modified to include the travel times between stations, as well as switches between lines. I thought this logic should have been sufficient in predicting the best route to take from a certain source station to a destination station, but I found that there was some bugs in my code. 
+I have used a similar logic to that used for the first part. The /scheduler route is used for the bonus part of the project.
+
+The handle_data.py consists of an additional helper function shortestTime that finds the appropriate route based on least time taken to reach the source from the destination. The function displays the route that takes the least amount of time to get from source to destination, after taking into account the time taken to travel from each station as well as the time when making an interchange.
+
+I have made a few assumptions while printing the best route, which are as follows -
+    1. If the journey starts before peak time, all travel times later on, even if within peak time haven't been taken into account
+    2. If the journey starts before night time, it is assumed that the line will not stop midway (For eg - If there is a DT line at 9.45 pm, it is assumed that it will run its full course and will not stop at 10 pm)
+    3. If a journey starts in peak hours, then it ends in peak hours
+    4. If a journey starts in night hours, it ends in night hours 
+    5. If a journey starts in non-peak hours, it ends in non-peak hours
+    6. Stations which might not have been constructed yet, are also assumed to be operational
+
+The efficiency heuristic used for this is the least amount of time taken, in a similar format to that output for the first part.
+
+Screenshots for the same have been added in the Screenshots folder.

@@ -1,6 +1,8 @@
 import csv
 import json
 
+minTime = float('inf')
+
 # Convert Input from form to station code
 def findCode(station):
     with open('static/StationMap.csv') as sm:
@@ -81,6 +83,65 @@ def shortestRoute(graph, source, dest, route=[]):
             new_route = shortestRoute(graph, node, dest, route)
             if new_route:
                 if not shortest or len(new_route) < len(shortest):
+                    shortest = new_route
+    return shortest
+
+# Find shortest route with traffic
+def shortestTime(graph, source, dest, hours, mins, dayOfWeek, timeTravelled, route=[]):
+    global minTime
+    sourceList = source.split("/")
+    switchLine = 0
+    # Set flag for when a switch is made
+    if len(route) > 1:
+        fList = route[len(route)-1].split("/")
+        sList = route[len(route)-2].split("/")
+        sourceList = source.split("/")
+        cLine = set(fList).intersection(sList)
+        dLine = set(fList).intersection(sourceList)
+        if cLine != dLine:
+            switchLine = 1
+        else:
+            switchLine = 0
+    # Peak Hours Case
+    if ((hours >= 6 or hours < 9 or (hours == 9 and mins == 0)) or (hours >= 18 or hours < 21 or (hours == 21 and mins == 0))) and (dayOfWeek < 6):
+        if 'NS' in source or 'NE' in source:
+            timeTravelled += 12
+        else:
+            timeTravelled += 10
+        # Make Switch?
+        if switchLine == 1:
+            timeTravelled += 15
+    # Night Hours Case
+    elif (hours >= 22 or hours < 6 or (hours == 6 and mins == 0)):
+        if 'TE' in source:
+            timeTravelled += 8
+        else:
+            timeTravelled += 10
+        # Make Switch?
+        if switchLine == 1:
+            timeTravelled += 10
+    # Non-peak hours Case
+    else:
+        if 'DT' in source or 'TE' in source:
+            timeTravelled += 8
+        else:
+            timeTravelled += 10
+        # Make Switch?
+        if switchLine == 1:
+            timeTravelled += 15
+    route = route + [source]
+    if source == dest:
+        return route
+    if source not in list(graph.keys()):
+        return None
+    shortest = None
+    for node in graph[source]:
+        if node not in route:
+            new_route = shortestTime(graph, node, dest, hours, mins, dayOfWeek, timeTravelled, route)
+            if new_route:
+                # Assign new route if travel time is lesser
+                if not shortest or (len(new_route) < len(shortest) and timeTravelled < minTime):
+                    minTime = timeTravelled
                     shortest = new_route
     return shortest
 
